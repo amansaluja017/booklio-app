@@ -1,5 +1,4 @@
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
-import { AuthProvider } from "@/lib/auth";
 import IndexPage from "@/pages/IndexPage";
 import HomePage from "@/pages/HomePage";
 import LoginPage from "@/pages/LoginPage";
@@ -21,7 +20,6 @@ import ContactPage from "./pages/ContactPage";
 
 function App() {
   return (
-    <AuthProvider refetchInterval={5 * 60}>
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<IndexPage />} />
@@ -78,7 +76,6 @@ function App() {
           
         </Routes>
       </BrowserRouter>
-    </AuthProvider>
   );
 }
 

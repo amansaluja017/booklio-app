@@ -25,7 +25,8 @@ export default function HomePage() {
       try {
         const services = await apiClient.getServices();
         const data = services as servicesResponse;
-        if (services) setData(data.data.services.filter((service) => service.status));
+        if (services) setData(data.data.services);
+        console.log("Fetched services:", data.data.services);
       } catch (error) {
         console.error("Error fetching services:", error);
       }

@@ -59,7 +59,7 @@ export function ManageServiceCard() {
             className="w-full max-w-md hover:shadow-lg transition-shadow hover:bg-primary/2">
             <CardHeader>
               <div className="flex items-start justify-between">
-                <CardTitle className="text-xl">{req.category.name}</CardTitle>
+                <CardTitle className="text-xl">{req.category?.name}</CardTitle>
               <div className="flex items-center gap-3">
                 <input
                   title="status"

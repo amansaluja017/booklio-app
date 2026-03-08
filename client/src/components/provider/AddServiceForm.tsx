@@ -25,7 +25,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { useSession } from "@/lib/auth";
 import { useSelector } from "react-redux";
 
 type categoryResponse = {
@@ -50,9 +49,6 @@ export default function AddServiceForm() {
   const [description, setDescription] = useState<string>("");
   const [status, setStatus] = useState<boolean>(true);
   const [serviceValue, setServiceValue] = useState<string>("");
-
-  const session = useSession();
-  const address = session.data?.user.address as address;
 
   const user = useSelector((state: any) => state.user);
 
