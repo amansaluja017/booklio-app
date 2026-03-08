@@ -4,9 +4,7 @@ import { useNavigate } from "react-router-dom";
 import {
   Popover,
   PopoverContent,
-  PopoverDescription,
   PopoverHeader,
-  PopoverTitle,
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { useDispatch, useSelector } from "react-redux";

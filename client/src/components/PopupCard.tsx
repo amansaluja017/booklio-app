@@ -2,7 +2,6 @@
 
 import { Mail, MapPin, Phone, Star, User, X } from "lucide-react";
 import { ReviewCard } from "./ReviewCard";
-import { useState } from "react";
 import BookingForm from "./BookingForm";
 
 interface PopupCardProps {

@@ -7,7 +7,6 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { X } from "lucide-react";
 
 export function EventDataForm({ event, setEventDataFormOpen }: { event: any; setEventDataFormOpen: (open: boolean) => void }) {
 
