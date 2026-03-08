@@ -1,0 +1,98 @@
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardAction,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import apiClient from "@/utilis/apiClient";
+import { useForm } from "react-hook-form";
+
+export default function EditDetailsForm({
+  setIsEditing,
+}: {
+  setIsEditing: (editing: boolean) => void;
+}) {
+  const { register, handleSubmit } = useForm();
+
+  const onSubmit = async (data: any) => {
+    try {
+      const response = await apiClient.updateCustomerDetails(data);
+      setIsEditing(false);
+    } catch (error) {
+      console.error("Failed to update details");
+    }
+  };
+
+  return (
+    <div className="absolute z-50 top-0 left-0 w-full h-full bg-black/50 flex items-center justify-center">
+      <Card className="w-full max-w-sm">
+        <CardHeader>
+          <CardTitle>Edit Details</CardTitle>
+          <CardDescription>
+            Update your profile information below.
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <form onSubmit={handleSubmit(onSubmit)}>
+            <div className="flex flex-col gap-6">
+              <div className="grid gap-2">
+                <div className="flex items-center">
+                  <Label htmlFor="oldPassword">Old Password</Label>
+                </div>
+                <Input
+                  id="oldPassword"
+                  type="password"
+                  placeholder="Enter your old password"
+                  required
+                  {...register("oldPassword")}
+                />
+              </div>
+
+              <div className="grid gap-2">
+                <div className="flex items-center">
+                  <Label htmlFor="new-password">New Password</Label>
+                </div>
+                <Input
+                  id="new-password"
+                  placeholder="Enter your new password"
+                  type="password"
+                  required
+                  {...register("newPassword")}
+                />
+              </div>
+
+              <div className="grid gap-2">
+                <div className="flex items-center">
+                  <Label htmlFor="confirm-password">Confirm Password</Label>
+                </div>
+                <Input
+                  id="confirm-password"
+                  placeholder="Enter your confirm password"
+                  type="password"
+                  required
+                  {...register("confirmPassword")}
+                />
+              </div>
+            </div>
+            <Button type="submit" className="w-full mt-6 cursor-pointer">
+              Update
+            </Button>
+            <Button
+              onClick={() => setIsEditing(false)}
+              variant="outline"
+              className="w-full mt-3 cursor-pointer">
+              Cancel
+            </Button>
+          </form>
+        </CardContent>
+        <CardFooter className="flex-col gap-2"></CardFooter>
+      </Card>
+    </div>
+  );
+}
