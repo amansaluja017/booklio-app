@@ -3,7 +3,7 @@ import { type Request, type Response } from "express";
 import { Customer } from "../models/customer.model";
 import { ApiError } from "../utils/ApiError";
 import { asyncHandler } from "../utils/asyncHandler";
-import { customerRegister, updateAddress } from "../validations/validation";
+import { customerRegister, loginCustomerValidation, updateAddress } from "../validations/validation";
 import { ApiResponse } from "../utils/ApiResponse";
 import bcrypt from "bcrypt";
 import { z } from "zod";
@@ -77,11 +77,15 @@ export const registerCustomer = asyncHandler(async (req: Request, res: Response)
 
 export const loginCustomer = asyncHandler(async (req: Request, res: Response) => {
 
-  const { email, password } = req.body;
+  const body = req.body;
+  
+  const parsedData = loginCustomerValidation.safeParse(body);
 
-  if (!(email && password)) {
-    throw new ApiError(400, "All fields are required");
+  if (!parsedData.success) {
+    throw new ApiError(400, "Invalid input data", (z as any).treeifyError(parsedData.error).properties);
   }
+
+  const { email, password } = parsedData.data;
 
   const user = await Customer.findOne({ email }).select("+password +refreshToken");
 

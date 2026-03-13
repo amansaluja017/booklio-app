@@ -27,8 +27,7 @@ class ApiClient {
       headers: defaultHeaders,
       credentials: API_BASE ? "include" : "same-origin",
     });
-    console.log(response)
-    if (!response.ok) throw new Error(`HTTP error ${response}`);
+    if (!response.ok) throw new Error(`${response.statusText}`);
     return response.json();
   }
 

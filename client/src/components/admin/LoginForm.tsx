@@ -1,7 +1,6 @@
 import { Button } from "@/components/ui/button";
 import {
   Card,
-  CardAction,
   CardContent,
   CardDescription,
   CardFooter,
@@ -15,6 +14,9 @@ import { useForm } from "react-hook-form";
 import apiClient from "@/utilis/apiClient";
 import { useDispatch } from "react-redux";
 import { login } from "@/slice/authSlice";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { loginAdminValidations } from "../../../../server/validations/validation";
+import { useState } from "react";
 
 type LoginFormTypes = {
   email: string;
@@ -22,7 +24,8 @@ type LoginFormTypes = {
 };
 
 export function LoginForm() {
-  const { register, handleSubmit } = useForm<LoginFormTypes>();
+  const { register, handleSubmit, formState: { errors } } = useForm<LoginFormTypes>({ resolver: zodResolver(loginAdminValidations) });
+  const [errorMessage, setErrorMessage] = useState<string>("");
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -32,12 +35,12 @@ export function LoginForm() {
       const res = await apiClient.adminLogin({ email, password });
 
       if (res) {
-        const data = res as {data: {user: any, token: string}};
+        const data = res as {data: {user: LoginFormTypes, token: string}};
         dispatch(login(data.data.user));
         navigate("/admin/dashboard");
       }
     } catch (error) {
-      console.error(error);
+      setErrorMessage(error instanceof Error ? error.message : "Failed to login admin")
       throw new Error("Failed to login admin");
     }
   };
@@ -76,7 +79,7 @@ export function LoginForm() {
             </div>
 
              <p className="text-xs text-muted-foreground text-red-500">
-              Use atleat one uppercase, lowercase, number and special character in password
+              {errors.email?.message || errors.password?.message || errorMessage}
             </p>
 
             <div className="flex justify-between">

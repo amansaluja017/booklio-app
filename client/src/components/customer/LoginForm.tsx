@@ -15,6 +15,9 @@ import { useForm } from "react-hook-form";
 import apiClient from "@/utilis/apiClient";
 import { useDispatch } from "react-redux";
 import { login } from "@/slice/authSlice";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { loginCustomerValidation } from "../../../../server/validations/validation";
+import { useState } from "react";
 
 type LoginFormTypes = {
   email: string;
@@ -22,6 +25,7 @@ type LoginFormTypes = {
 };
 
 interface LoginResponse {
+  status: number;
   data: {
     user: {
       _id: string;
@@ -39,24 +43,22 @@ interface LoginResponse {
 }
 
 export function LoginForm() {
-  const { register, handleSubmit } = useForm<LoginFormTypes>();
+  const { register, handleSubmit, formState: { errors } } = useForm<LoginFormTypes>({ resolver: zodResolver(loginCustomerValidation) });
+  const [errorMessage, setErrorMessage] = useState<string>("");
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
   const submit = async (data: LoginFormTypes) => {
     const { email, password } = data;
     try {
-      const res = await apiClient.loginCustomer({ email, password });
+      const res = await apiClient.loginCustomer({ email, password }) as LoginResponse;
       if (res) {
-        const { _id, name, email, role, address } = (res as LoginResponse).data.user;
+        const { _id, name, email, role, address } = res.data.user;
         dispatch(login({  _id, name, email, role, address }));
         navigate("/home");
       }
-
-      navigate("/home");
     } catch (error) {
-      console.error(error);
-      throw new Error("Failed to login customer");
+      setErrorMessage(error instanceof Error ? error.message : "Failed to login customer")
     }
   };
 
@@ -97,7 +99,7 @@ export function LoginForm() {
             </div>
 
             <p className="text-xs text-muted-foreground text-red-500">
-              Use atleat one uppercase, lowercase, number and special character in password
+              {errors.email?.message as string || errors.password?.message as string || errorMessage}
             </p>
 
             <div className="cursor-pointer flex justify-between">

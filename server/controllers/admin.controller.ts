@@ -2,12 +2,17 @@ import { Admin } from "../models/admin.model";
 import { ApiError } from "../utils/ApiError";
 import { ApiResponse } from "../utils/ApiResponse";
 import { asyncHandler } from "../utils/asyncHandler";
-import { adminRegister } from "../validations/validation";
+import {
+  adminRegister,
+  loginAdminValidations,
+} from "../validations/validation";
 import { Request, Response } from "express";
 import z from "zod";
 import mongoose from "mongoose";
 
-export const generateAccessAndRefreshToken = async (userId: mongoose.Types.ObjectId) => {
+export const generateAccessAndRefreshToken = async (
+  userId: mongoose.Types.ObjectId,
+) => {
   try {
     const admin = await Admin.findById(userId);
 
@@ -15,8 +20,8 @@ export const generateAccessAndRefreshToken = async (userId: mongoose.Types.Objec
       throw new ApiError(404, "Admin not found");
     }
 
-    const accessToken = await admin?.generateAccessToken();
-    const refreshToken = await admin?.generateRefreshToken();
+    const accessToken = admin.generateAccessToken();
+    const refreshToken = admin.generateRefreshToken();
 
     admin.refreshToken = refreshToken;
     await admin?.save({ validateBeforeSave: false });
@@ -26,64 +31,89 @@ export const generateAccessAndRefreshToken = async (userId: mongoose.Types.Objec
     throw new ApiError(
       500,
       "failed to generate access and refresh token",
-      error.message
+      error.message,
     );
   }
 };
 
+export const registerAdmin = asyncHandler(
+  async (req: Request, res: Response) => {
+    const body = req.body;
 
-export const registerAdmin = asyncHandler(async (req: Request, res: Response) => {
+    const parseData = adminRegister.safeParse(body);
 
-  const body = req.body;
-
-  const parseData = adminRegister.safeParse(body);
-
- if (!parseData.success) {
-    throw new ApiError(400, "Invalid input data", (z as any).treeifyError(parseData.error).properties);
-  }
-
-  const { name, email, password } = parseData.data;
-
-  try {
-    const existedCustomer = await Admin.findOne({ email });
-
-    if (existedCustomer) {
-      return res.status(400).json(
-        new ApiResponse(400, null, "Admin with this email already exists")
+    if (!parseData.success) {
+      throw new ApiError(
+        400,
+        "Invalid input data",
+        (z as any).treeifyError(parseData.error).properties,
       );
     }
 
-    const newCustomer = await Admin.create({
-      name,
-      email,
-      password,
-      role: "admin",
-    });
+    const { name, email, password } = parseData.data;
 
-    if (!newCustomer) {
-      return res.status(500).json(
-        new ApiResponse(500, null, "Failed to create admin")
-      );
+    try {
+      const existedCustomer = await Admin.findOne({ email });
+
+      if (existedCustomer) {
+        return res
+          .status(400)
+          .json(
+            new ApiResponse(400, null, "Admin with this email already exists"),
+          );
+      }
+
+      const newCustomer = await Admin.create({
+        name,
+        email,
+        password,
+        role: "admin",
+      });
+
+      if (!newCustomer) {
+        return res
+          .status(500)
+          .json(new ApiResponse(500, null, "Failed to create admin"));
+      }
+
+      return res
+        .status(201)
+        .json(
+          new ApiResponse(
+            201,
+            { newCustomer },
+            "Admin registered successfully",
+          ),
+        );
+    } catch (error) {
+      console.error(error);
+      return res
+        .status(500)
+        .json(
+          new ApiResponse(
+            500,
+            null,
+            "An error occurred while registering the admin",
+          ),
+        );
     }
-
-    return res.status(201).json(
-      new ApiResponse(201, { newCustomer }, "Admin registered successfully")
-    );
-  } catch (error) {
-    console.error(error);
-    return res.status(500).json(
-      new ApiResponse(500, null, "An error occurred while registering the admin")
-    );
-  }
-});
+  },
+);
 
 export const loginAdmin = asyncHandler(async (req: Request, res: Response) => {
+  const body = req.body;
 
-  const { email, password } = req.body;
+  const parsedData = loginAdminValidations.safeParse(body);
 
-  if (!(email && password)) {
-    throw new ApiError(400, "All fields are required");
+  if (!parsedData.success) {
+    throw new ApiError(
+      400,
+      "Invalid input data",
+      (z as any).treeifyError(parsedData.error).properties,
+    );
   }
+
+  const { email, password } = parsedData.data;
 
   const user = await Admin.findOne({ email }).select("+password +refreshToken");
 
@@ -98,7 +128,7 @@ export const loginAdmin = asyncHandler(async (req: Request, res: Response) => {
   }
 
   const { accessToken, refreshToken } = await generateAccessAndRefreshToken(
-    user._id
+    user._id,
   );
 
   return res
@@ -121,22 +151,24 @@ export const loginAdmin = asyncHandler(async (req: Request, res: Response) => {
           accessToken,
           refreshToken,
         },
-        "Logged in successfully"
-      )
+        "Logged in successfully",
+      ),
     );
 });
 
-export const getAdminProfile = asyncHandler(async (req: Request, res: Response) => {
-  const admin = req.admin;
+export const getAdminProfile = asyncHandler(
+  async (req: Request, res: Response) => {
+    const admin = req.admin;
 
-  if (!admin) {
-    throw new ApiError(404, "Admin not found");
-  }
+    if (!admin) {
+      throw new ApiError(404, "Admin not found");
+    }
 
-  return res
-    .status(200)
-    .json(new ApiResponse(200, admin, "User profile fetched successfully"));
-});
+    return res
+      .status(200)
+      .json(new ApiResponse(200, admin, "User profile fetched successfully"));
+  },
+);
 
 export const logoutAdmin = asyncHandler(async (req: Request, res: Response) => {
   const admin = req.admin;
@@ -154,7 +186,7 @@ export const logoutAdmin = asyncHandler(async (req: Request, res: Response) => {
     },
     {
       new: true,
-    }
+    },
   );
 
   return res

@@ -19,6 +19,19 @@ export const customerRegister = z.object({
   //   .optional(),
 });
 
+export const loginCustomerValidation = z.object({
+  email: z
+    .email()
+    .includes("@", "Email must contain '@'")
+    .endsWith("gmail.com", "Email must end with 'gmail.com'")
+    .transform((email) => email.trim().toLowerCase()),
+  password: z
+    .string()
+    .min(8, "Password must be at least 8 characters long")
+    .max(15, "Password must be at most 15 characters long")
+    .transform((pass) => pass.trim()),
+});
+
 export const updateAddress = z.object({
 
   country: z.string().min(3, "Country must be at least 3 characters long"),
@@ -54,6 +67,19 @@ export const providerRegister = z.object({
       /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])(?=.{8,})/,
       "Password should meet all requirments",
     )
+    .transform((pass) => pass.trim()),
+});
+
+export const loginProviderValidation = z.object({
+  email: z
+    .email()
+    .includes("@", "Email must contain '@'")
+    .endsWith("gmail.com", "Email must end with 'gmail.com'")
+    .transform((email) => email.trim().toLowerCase()),
+  password: z
+    .string()
+    .min(8, "Password must be at least 8 characters long")
+    .max(15, "Password must be at most 15 characters long")
     .transform((pass) => pass.trim()),
 });
 
@@ -104,6 +130,18 @@ export const adminRegister = z.object({
     .transform((pass) => pass.trim()),
 });
 
+export const loginAdminValidations = z.object({
+  email: z
+    .email()
+    .includes("@", "Email must contain '@'")
+    .endsWith("gmail.com", "Email must end with 'gmail.com'")
+    .transform((email) => email.trim().toLowerCase()),
+  password: z
+    .string()
+    .min(8, "Password must be at least 8 characters long")
+    .max(15, "Password must be at most 15 characters long")
+    .transform((pass) => pass.trim()),
+});
 export const createServiceValidataions = z.object({
   name: z
     .string()

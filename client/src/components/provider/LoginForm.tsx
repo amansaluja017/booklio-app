@@ -15,6 +15,9 @@ import { useForm } from "react-hook-form";
 import apiClient from "@/utilis/apiClient";
 import { useDispatch } from "react-redux";
 import { login } from "@/slice/authSlice";
+import { useState } from "react";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { loginProviderValidation } from "../../../../server/validations/validation";
 
 type LoginFormTypes = {
   email: string;
@@ -40,7 +43,8 @@ interface LoginFormProps {
 }
 
 export function LoginForm() {
-  const { register, handleSubmit } = useForm<{email: string, password: string}>();
+  const { register, handleSubmit, formState: { errors } } = useForm<{ email: string, password: string }>({ resolver: zodResolver(loginProviderValidation) });
+  const [errorMessage, setErrorMessage] = useState<string>("");
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -56,8 +60,7 @@ export function LoginForm() {
       }
       
     } catch (error) {
-      console.error(error);
-      throw new Error("Failed to login provider");
+      setErrorMessage(error instanceof Error ? error.message : "Failed to login provider")
     }
   };
 
@@ -98,7 +101,7 @@ export function LoginForm() {
             </div>
 
              <p className="text-xs text-muted-foreground text-red-500">
-              Use atleat one uppercase, lowercase, number and special character in password
+              {errors.email?.message || errors.password?.message || errorMessage}
             </p>
 
             <div className="flex justify-between">
