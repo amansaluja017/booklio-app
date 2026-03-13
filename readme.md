@@ -125,7 +125,7 @@ Local-service-app/
 
 1. **Clone the repository**
    ```bash
-   git clone <repository-url>
+   git clone https://github.com/amansaluja017/booklio-app.git
    cd Local-service-app
    ```
 
@@ -140,41 +140,6 @@ Local-service-app/
    cd ../server
    npm install
    ```
-
-## 🔧 Environment Variables
-
-### Server `.env` file
-Create a `.env` file in the `/server` directory:
-
-```env
-# Database
-MONGODB_URI=mongodb://localhost:27017/booklio
-# or for MongoDB Atlas:
-# MONGODB_URI=mongodb+srv://username:password@cluster.mongodb.net/booklio
-
-# JWT
-JWT_SECRET=your_jwt_secret_key_here
-JWT_EXPIRY=7d
-
-# Cloudinary
-CLOUDINARY_NAME=your_cloudinary_name
-CLOUDINARY_API_KEY=your_cloudinary_api_key
-CLOUDINARY_API_SECRET=your_cloudinary_api_secret
-
-# Server
-PORT=5000
-NODE_ENV=development
-
-# CORS
-CORS_ORIGIN=http://localhost:5173
-```
-
-### Client `.env` file
-Create a `.env.local` file in the `/client` directory:
-
-```env
-VITE_API_URL=http://localhost:5000/api
-```
 
 ## ▶️ Running the Application
 
