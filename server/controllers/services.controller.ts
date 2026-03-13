@@ -4,7 +4,7 @@ import { z } from "zod";
 import { Category } from "../models/category.model";
 import { Provider } from "../models/provider.model";
 import { Service } from "../models/service.model";
-import { createServiceValidataions } from "../validations/validation";
+import { createServiceValidataions } from "../../validations/validation";
 import { ApiError } from "../utils/ApiError";
 import { ApiResponse } from "../utils/ApiResponse";
 

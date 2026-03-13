@@ -5,7 +5,7 @@ import { asyncHandler } from "../utils/asyncHandler";
 import {
   adminRegister,
   loginAdminValidations,
-} from "../validations/validation";
+} from "../../validations/validation";
 import { Request, Response } from "express";
 import z from "zod";
 import mongoose from "mongoose";

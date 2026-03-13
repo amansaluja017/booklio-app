@@ -3,7 +3,7 @@ import { type Request, type Response } from "express";
 import { Customer } from "../models/customer.model";
 import { ApiError } from "../utils/ApiError";
 import { asyncHandler } from "../utils/asyncHandler";
-import { customerRegister, loginCustomerValidation, updateAddress } from "../validations/validation";
+import { customerRegister, loginCustomerValidation, updateAddress } from "../../validations/validation";
 import { ApiResponse } from "../utils/ApiResponse";
 import bcrypt from "bcrypt";
 import { z } from "zod";

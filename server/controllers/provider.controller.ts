@@ -7,7 +7,7 @@ import {
   loginProviderValidation,
   providerRegister,
   storeSetup,
-} from "../validations/validation";
+} from "../../validations/validation";
 import { z } from "zod";
 import { type Request, type Response } from "express";
 import bcrypt from "bcrypt";

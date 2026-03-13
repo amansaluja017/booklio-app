@@ -17,7 +17,7 @@ import { useDispatch } from "react-redux";
 import { login } from "@/slice/authSlice";
 import { useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { loginProviderValidation } from "../../../../server/validations/validation";
+import { loginProviderValidation } from "../../../../validations/validation";
 
 type LoginFormTypes = {
   email: string;
