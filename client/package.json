@@ -4,10 +4,9 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
-    "build": "tsc -b && vite build",
-    "lint": "eslint .",
-    "preview": "vite preview"
+    "copy-validations": "mkdir -p src/validations && cp ../validations/validation.ts src/validations/validation.ts",
+    "build": "npm run copy-validations && tsc -b && vite build",
+    "dev": "npm run copy-validations && vite"
   },
   "dependencies": {
     "@fullcalendar/daygrid": "^6.1.20",
