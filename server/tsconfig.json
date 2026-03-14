@@ -17,6 +17,6 @@
     "resolveJsonModule": true,
     "moduleResolution": "node"
   },
-  "include": ["**/*.ts"],
+  "include": ["**/*.ts", "../validations/**/*.ts"],
   "exclude": ["node_modules", "dist"]
 }
