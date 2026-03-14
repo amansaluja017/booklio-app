@@ -4,8 +4,9 @@
   "private": true,
   "type": "commonjs",
   "scripts": {
-    "build": "tsc",
-    "start": "node dist/server/index.js",
+    "copy-validations": "mkdir -p validations && cp ../validations/validation.ts validations/validation.ts",
+    "build": "npm run copy-validations && tsc",
+    "start": "npm run copy-validations && node dist/server/index.js",
     "dev": "nodemon"
   },
   "dependencies": {

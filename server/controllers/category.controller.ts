@@ -1,7 +1,7 @@
 import { asyncHandler } from "../utils/asyncHandler";
 import { Request, Response } from "express";
 import { ApiError } from "../utils/ApiError";
-import { createCategoryValidation } from "../../validations/validation";
+import { createCategoryValidation } from "../validations/validation";
 import z from "zod";
 import { Category } from "../models/category.model";
 import { ApiResponse } from "../utils/ApiResponse";

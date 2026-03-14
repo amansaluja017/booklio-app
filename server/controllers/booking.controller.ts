@@ -1,5 +1,5 @@
 import { asyncHandler } from "../utils/asyncHandler";
-import { createBookingValidations } from "../../validations/validation";
+import { createBookingValidations } from "../validations/validation";
 import { Request, Response } from "express";
 import { Customer } from "../models/customer.model";
 import { Service } from "../models/service.model";

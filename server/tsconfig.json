@@ -8,7 +8,6 @@
     "baseUrl": "..",
     "paths": {
       "models/*": ["models/*"],
-      "validations/*": ["validations/*"]
     },
     "strict": true,
     "esModuleInterop": true,
@@ -17,6 +16,6 @@
     "resolveJsonModule": true,
     "moduleResolution": "node"
   },
-  "include": ["**/*.ts", "../validations/**/*.ts"],
+  "include": ["**/*.ts"],
   "exclude": ["node_modules", "dist"]
 }
