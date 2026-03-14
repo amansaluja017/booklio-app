@@ -19,7 +19,7 @@ import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { signup } from "@/slice/authSlice";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { providerRegister } from "../../../../validations/validation";
+import { providerRegister } from "@/validations/validation";
 
 interface RegisterFormData {
   email: string;

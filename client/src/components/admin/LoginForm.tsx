@@ -15,7 +15,7 @@ import apiClient from "@/utilis/apiClient";
 import { useDispatch } from "react-redux";
 import { login } from "@/slice/authSlice";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { loginAdminValidations } from "../../../../validations/validation";
+import { loginAdminValidations } from "@/validations/validation";
 import { useState } from "react";
 
 type LoginFormTypes = {

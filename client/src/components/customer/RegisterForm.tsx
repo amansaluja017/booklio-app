@@ -19,7 +19,7 @@ import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { signup } from "@/slice/authSlice";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { customerRegister } from "../../../../validations/validation";
+import { customerRegister } from "@/validations/validation";
 
 export function RegisterForm() {
   const {
