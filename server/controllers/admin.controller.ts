@@ -67,7 +67,7 @@ export const registerAdmin = asyncHandler(
         name,
         email,
         password,
-        role: "admin",
+        role: "admin"
       });
 
       if (!newCustomer) {
@@ -86,7 +86,7 @@ export const registerAdmin = asyncHandler(
           ),
         );
     } catch (error) {
-      console.error(error);
+      if (error instanceof Error) console.error(error.message);
       return res
         .status(500)
         .json(

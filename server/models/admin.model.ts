@@ -1,19 +1,8 @@
 import mongoose, { Schema } from "mongoose";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-
-export interface AdminTypes {
-  _id: mongoose.Types.ObjectId;
-  name: string;
-  email: string;
-  password: string;
-  role: "customer" | "provider" | "admin";
-  refreshToken?: string;
-  
-  comparePassword(password: string): Promise<boolean>;
-  generateAccessToken(): string;
-  generateRefreshToken(): string;
-}
+import { auth_secret } from "server/config/config";
+import { AdminTypes } from "server/types";
 
 const adminSchema = new Schema<AdminTypes>({
   name: {
@@ -47,16 +36,16 @@ adminSchema.pre("save", async function () {
   }
 });
 
-adminSchema.methods.comparePassword = async function (password: string) {
+adminSchema.methods.comparePassword = async function (password: string): Promise<boolean> {
   return await bcrypt.compare(password, this.password);
 };
 
-adminSchema.methods.generateAccessToken = function () {
-  return jwt.sign({ id: this._id }, process.env.AUTH_SECRET!, { expiresIn: "1d" });
+adminSchema.methods.generateAccessToken = function (): string {
+  return jwt.sign({ id: this._id }, auth_secret, { expiresIn: "1d" });
 };
 
-adminSchema.methods.generateRefreshToken = function () {
-  return jwt.sign({ id: this._id }, process.env.AUTH_SECRET!, { expiresIn: "7d" });
+adminSchema.methods.generateRefreshToken = function (): string {
+  return jwt.sign({ id: this._id }, auth_secret, { expiresIn: "7d" });
 };
 
 export const Admin = mongoose.model<AdminTypes>('Admin', adminSchema);

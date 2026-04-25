@@ -1,28 +1,11 @@
 import mongoose, { Schema } from "mongoose";
-
-interface ServiceTypes {
-  _id: string;
-  name: string;
-  category: mongoose.Types.ObjectId;
-  provider: mongoose.Types.ObjectId;
-  description: string;
-  price: number;
-  status: boolean;
-  rating: number;
-  reviews?: mongoose.Types.ObjectId[];
-  location: {
-    city: string;
-    state: string;
-    zipCode: string;
-    country: string;
-  };
-}
+import { ServiceTypes } from "server/types";
 
 const serviceSchema = new Schema<ServiceTypes>(
   {
     name: {
       type: String,
-      required: true
+      required: true,
     },
     category: {
       type: mongoose.Types.ObjectId,
@@ -76,6 +59,13 @@ const serviceSchema = new Schema<ServiceTypes>(
   { timestamps: true },
 );
 
-serviceSchema.index({ name: "text", description: "text", "location.city": "text", "location.state": "text", "location.country": "text" });
+serviceSchema.index({
+  name: "text",
+  description: "text",
+  "location.city": "text",
+  "location.state": "text",
+  "location.country": "text",
+});
 
-export const Service = mongoose.models?.Service || mongoose.model("Service", serviceSchema);
+export const Service =
+  mongoose.models?.Service || mongoose.model("Service", serviceSchema);

@@ -1,34 +1,8 @@
 import mongoose, { Schema } from "mongoose";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-
-export interface ProviderTypes {
-  _id: mongoose.Types.ObjectId;
-  name: string;
-  email: string;
-  phone: string;
-  address: {
-    state: string;
-    city: string;
-    street: string;
-    zipCode: string;
-    country: string;
-  };
-  store: string,
-  documents?: object;
-  services: Array<mongoose.Types.ObjectId>;
-  password: string;
-  description: string;
-  role: "customer" | "provider" | "admin";
-  bankDetails?: object;
-  rating?: number;
-  reviews?: Array<string>;
-  isAprooved: boolean,
-  refreshToken: string,
-  comparePassword(password: string): Promise<boolean>;
-  generateAccessToken(): string;
-  generateRefreshToken(): string;
-}
+import { ProviderTypes } from "server/types";
+import { auth_secret } from "server/config/config";
 
 const providerSchema = new Schema<ProviderTypes>({
   name: {
@@ -109,16 +83,16 @@ providerSchema.pre("save", async function () {
   }
 });
 
-providerSchema.methods.comparePassword = async function (password: string) {
+providerSchema.methods.comparePassword = async function (password: string): Promise<boolean> {
   return await bcrypt.compare(password, this.password);
 };
 
-providerSchema.methods.generateAccessToken = function () {
-  return jwt.sign({ id: this._id }, process.env.AUTH_SECRET!, { expiresIn: "1d" });
+providerSchema.methods.generateAccessToken = function (): string {
+  return jwt.sign({ id: this._id }, auth_secret, { expiresIn: "1d" });
 };
 
-providerSchema.methods.generateRefreshToken = function () {
-  return jwt.sign({ id: this._id }, process.env.AUTH_SECRET!, { expiresIn: "7d" });
+providerSchema.methods.generateRefreshToken = function (): string {
+  return jwt.sign({ id: this._id }, auth_secret, { expiresIn: "7d" });
 };
 
 export const Provider =

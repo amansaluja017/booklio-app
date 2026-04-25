@@ -1,27 +1,8 @@
 import mongoose, { Schema } from "mongoose";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-
-export interface CustomerTypes {
-  _id: mongoose.Types.ObjectId;
-  name: string;
-  email: string;
-  phone?: string;
-  address?: {
-    state: string;
-    city: string;
-    zipCode: string;
-    country: string;
-  };
-  password: string;
-  past_bookings?: mongoose.Types.ObjectId[];
-  role: "customer" | "provider" | "admin";
-  refreshToken?: string;
-  
-  comparePassword(password: string): Promise<boolean>;
-  generateAccessToken(): string;
-  generateRefreshToken(): string;
-}
+import { CustomerTypes } from "server/types";
+import { auth_secret } from "server/config/config";
 
 const customerSchema = new Schema<CustomerTypes>(
   {
@@ -81,16 +62,16 @@ customerSchema.pre("save", async function () {
   }
 });
 
-customerSchema.methods.comparePassword = async function (password: string) {
+customerSchema.methods.comparePassword = async function (password: string): Promise<boolean> {
   return await bcrypt.compare(password, this.password);
 };
 
-customerSchema.methods.generateAccessToken = function () {
-  return jwt.sign({ id: this._id }, process.env.AUTH_SECRET!, { expiresIn: "1d" });
+customerSchema.methods.generateAccessToken = function (): string {
+  return jwt.sign({ id: this._id }, auth_secret, { expiresIn: "1d" });
 };
 
-customerSchema.methods.generateRefreshToken = function () {
-  return jwt.sign({ id: this._id }, process.env.AUTH_SECRET!, { expiresIn: "7d" });
+customerSchema.methods.generateRefreshToken = function (): string {
+  return jwt.sign({ id: this._id }, auth_secret, { expiresIn: "7d" });
 };
 
 export const Customer =
