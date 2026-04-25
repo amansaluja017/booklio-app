@@ -1,8 +1,8 @@
 import mongoose, { Schema } from "mongoose";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-import { CustomerTypes } from "server/types";
-import { auth_secret } from "server/config/config";
+import { CustomerTypes } from "../middleware/auth";
+import { auth_secret } from "../config/config";
 
 const customerSchema = new Schema<CustomerTypes>(
   {

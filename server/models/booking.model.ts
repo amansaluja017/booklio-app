@@ -1,5 +1,26 @@
 import mongoose, { Schema } from "mongoose";
-import { BookingTypes } from "server/types";
+
+export interface BookingTypes {
+  _id?: mongoose.Types.ObjectId;
+  customer: mongoose.Types.ObjectId;
+  service: mongoose.Types.ObjectId;
+  provider: mongoose.Types.ObjectId;
+  notes?: string;
+  category: string;
+  status: "requested" | "confirmed" | "in-progress" | "completed" | "cancelled";
+  date: Date;
+  location: {
+    state: string;
+    city: string;
+    country: string;
+  };
+  image?: string;
+  otp?: string;
+  before_image?: string;
+  after_image?: string;
+  createdAt: Date;
+  updatedAt: Date;
+}
 
 const bookingSchema = new Schema<BookingTypes>({
   customer: {

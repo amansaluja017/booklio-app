@@ -1,5 +1,14 @@
 import mongoose, { Schema } from "mongoose";
-import { CategoryTypes } from "server/types";
+
+export interface CategoryTypes {
+  _id?: string;
+  name: string;
+  services_name: string[];
+  providers?: mongoose.Types.ObjectId[];
+  services?: mongoose.Types.ObjectId[];
+  createdAt: Date;
+  updatedAt: Date;
+}
 
 const categorySchema = new Schema<CategoryTypes>(
   {

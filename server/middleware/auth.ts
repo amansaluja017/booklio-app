@@ -6,7 +6,77 @@ import { Customer } from "../models/customer.model";
 import { Provider } from "../models/provider.model";
 import { ApiError } from "../utils/ApiError";
 import { asyncHandler } from "../utils/asyncHandler";
-import { AdminTypes, CustomerTypes, ProviderTypes } from "server/types";
+
+export interface AdminTypes {
+  _id: mongoose.Types.ObjectId;
+  name: string;
+  email: string;
+  password: string;
+  role: "customer" | "provider" | "admin";
+  refreshToken?: string;
+  comparePassword(password: string): Promise<boolean>;
+  generateAccessToken(): string;
+  generateRefreshToken(): string;
+};
+
+export interface CustomerTypes {
+  _id: mongoose.Types.ObjectId;
+  name: string;
+  email: string;
+  phone?: string;
+  address?: {
+    state: string;
+    city: string;
+    zipCode: string;
+    country: string;
+  };
+  password: string;
+  past_bookings?: mongoose.Types.ObjectId[];
+  role: "customer" | "provider" | "admin";
+  refreshToken?: string;
+
+  comparePassword(password: string): Promise<boolean>;
+  generateAccessToken(): string;
+  generateRefreshToken(): string;
+};
+
+export interface ProviderTypes {
+  _id: mongoose.Types.ObjectId;
+  name: string;
+  email: string;
+  phone: string;
+  address: {
+    state: string;
+    city: string;
+    street: string;
+    zipCode: string;
+    country: string;
+  };
+  store: string;
+  documents?: object;
+  services: Array<mongoose.Types.ObjectId>;
+  password: string;
+  description: string;
+  role: "customer" | "provider" | "admin";
+  bankDetails?: object;
+  rating?: number;
+  reviews?: Array<string>;
+  isAprooved: boolean;
+  refreshToken: string;
+  comparePassword(password: string): Promise<boolean>;
+  generateAccessToken(): string;
+  generateRefreshToken(): string;
+}
+
+declare global {
+  namespace Express {
+    interface Request {
+      customer: CustomerTypes;
+      provider: ProviderTypes;
+      admin: AdminTypes;
+    }
+  }
+};
 
 type cookiesType<T> = T extends string ? T : never;
 

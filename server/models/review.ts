@@ -1,5 +1,11 @@
 import mongoose, { Schema } from "mongoose";
-import { ReviewTypes } from "server/types";
+
+export interface ReviewTypes {
+  service: mongoose.Types.ObjectId;
+  customer: mongoose.Types.ObjectId;
+  rating: number;
+  comment: string;
+}
 
 const reviewSchema = new Schema<ReviewTypes>(
   {

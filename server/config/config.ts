@@ -1,4 +1,4 @@
-import { ApiError } from "server/utils/ApiError";
+import { ApiError } from "../utils/ApiError";
 
 function isString(value: string | undefined, name: string): asserts value is string {
   if (value === null || value === undefined) throw new ApiError(404, `${name} is not defined`);

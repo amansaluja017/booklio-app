@@ -1,5 +1,22 @@
 import mongoose, { Schema } from "mongoose";
-import { ServiceTypes } from "server/types";
+
+export interface ServiceTypes {
+  _id: string;
+  name: string;
+  category: mongoose.Types.ObjectId;
+  provider: mongoose.Types.ObjectId;
+  description: string;
+  price: number;
+  status: boolean;
+  rating: number;
+  reviews?: mongoose.Types.ObjectId[];
+  location: {
+    city: string;
+    state: string;
+    zipCode: string;
+    country: string;
+  };
+}
 
 const serviceSchema = new Schema<ServiceTypes>(
   {

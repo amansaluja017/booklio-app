@@ -1,8 +1,8 @@
 import mongoose, { Schema } from "mongoose";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-import { ProviderTypes } from "server/types";
-import { auth_secret } from "server/config/config";
+import { ProviderTypes } from "../middleware/auth";
+import { auth_secret } from "../config/config";
 
 const providerSchema = new Schema<ProviderTypes>({
   name: {

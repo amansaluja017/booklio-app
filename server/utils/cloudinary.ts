@@ -1,11 +1,7 @@
 import { v2 as Cloudinary } from "cloudinary";
 import fs from "fs";
-import {
-  cloudinary_api_key,
-  cloudinary_api_secret,
-  cloudinary_cloud_name,
-} from "server/config/config";
 import { ApiError } from "./ApiError";
+import { cloudinary_api_key, cloudinary_api_secret, cloudinary_cloud_name } from "../config/config";
 
 Cloudinary.config({
   cloud_name: cloudinary_cloud_name,

@@ -1,8 +1,8 @@
 import mongoose, { Schema } from "mongoose";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-import { auth_secret } from "server/config/config";
-import { AdminTypes } from "server/types";
+import { auth_secret } from "../config/config";
+import { AdminTypes } from "../middleware/auth";
 
 const adminSchema = new Schema<AdminTypes>({
   name: {
